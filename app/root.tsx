@@ -6,9 +6,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import '@fontsource/inter';
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +44,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+const theme = createTheme({
+  colorSchemes: {
+    dark:{
+      palette:{
+        mode: 'dark',
+        primary: { main: '#1976d2' },
+      }
+    } 
+  },
+});
 export default function App() {
-  return <Outlet />;
+  return <ThemeProvider theme={theme}>
+    <CssBaseline/>
+    <Outlet />
+  </ThemeProvider> ;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

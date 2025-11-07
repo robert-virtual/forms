@@ -7,9 +7,8 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  font-family: var(--font-sans);
+  background-color: var(--joy-palette-background-body);
+  color: var(--joy-palette-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
