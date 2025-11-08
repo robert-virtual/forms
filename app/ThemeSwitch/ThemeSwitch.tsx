@@ -1,4 +1,4 @@
-import { Select, ToggleButton, ToggleButtonGroup, useColorScheme } from "@mui/material";
+import {  ToggleButton, ToggleButtonGroup, useColorScheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import SunIcon from '@mui/icons-material/LightModeRounded';
 import MoonIcon from '@mui/icons-material/DarkModeRounded';

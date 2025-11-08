@@ -1,8 +1,9 @@
 
 
-export function Settings() {
+export default function Settings() {
     return (
-        <div>Settings Page</div>
+        <section className="grid h-screen w-full place-items-center ">
+            <div>Settings Page</div>
+        </section>
     )
-    
 }

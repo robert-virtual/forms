@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
-import { use, useState } from "react";
-import {  Avatar, Box, Button, DialogContent, DialogTitle, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, useTheme } from "@mui/material";
+import { use, useEffect, useState } from "react";
+import {  Avatar, Box, Button, DialogContent, DialogTitle, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, SvgIcon, Typography, useTheme } from "@mui/material";
 import { ThemeSwitch } from "~/ThemeSwitch/ThemeSwitch";
 import TuneIcon from '@mui/icons-material/TuneRounded';
 import InboxIcon from '@mui/icons-material/Inbox';
@@ -8,13 +8,16 @@ import MailIcon from '@mui/icons-material/Mail';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { CssBaseline, styled, Toolbar } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import type { RootState } from "~/store";
+import { DefaultToolbarOptions } from "~/toolbaroptions/defaultOptions";
+import { NewFormToolbarOptions } from "~/toolbaroptions/newFormOptions";
 
 
 export function meta({}: Route.MetaArgs) {
@@ -81,31 +84,32 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const toolbarComponents = {
+  default: <DefaultToolbarOptions/>,
+  newFormOptions: <NewFormToolbarOptions/>,
+  empty: <></>,
+};
+export type ToolbarComponents = keyof typeof toolbarComponents
+
 export default function home() {
   const [open,setOpen] = useState(false)
-   const [auth, setAuth] = useState(true);
+  const {forms} = useSelector((state:RootState)=>state.forms)
+  const [auth, setAuth] = useState(true);
   const theme = useTheme();
   function handleDrawerOpen() {
      setOpen(true);
   };
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  const toolbarOptions = useSelector((state:RootState)=>state.toolbarOptions)
   const handleDrawerClose = () => {
     setOpen(false);
   };
   const navigate = useNavigate()
-  function handleLogout(){
-    setAnchorEl(null);
-    navigate("/",{replace:true});
-  }
-  function handleClose(){
-    setAnchorEl(null);
-  }
-  function handleMenu(event: React.MouseEvent<HTMLElement>) {
-    setAnchorEl(event.currentTarget); 
-  }
   function gotoSettings(){
     // navigate to settings page
+  }
+  function ToolbarOptions() {
+    return toolbarComponents[toolbarOptions.componentKey] 
   }
   return (
     <Box sx={{ display: 'flex' }}>
@@ -135,41 +139,7 @@ export default function home() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
-          Your Company
-          </Typography>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          )}
+          <ToolbarOptions/>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -191,29 +161,21 @@ export default function home() {
           </IconButton>
         </DrawerHeader>
         <List sx={{flexGrow: 1}} >
-          {['Hola','Mundo','Test','Hello','Wolrd','Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+          {forms.length ?  forms.map((form, index) => (
+            <ListItem key={index.toString()} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={form.nombre} />
               </ListItemButton>
             </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List sx={{flexGrow: 1}}>
-          {['All mail', 'Trash', 'Spam','Hola','Mundo','Test','Hello','Wolrd'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+          ))
+        : (
               <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={"Aún no tienes formularios"} />
               </ListItemButton>
-            </ListItem>
-          ))}
+        )}
         </List>
         <Box
           sx={{
@@ -231,7 +193,7 @@ export default function home() {
         >
           
       <IconButton
-        onClick={() => gotoSettings()}
+        onClick={() => navigate('settings',{replace:true})}
       >
         <TuneIcon />
       </IconButton>
@@ -239,7 +201,7 @@ export default function home() {
         </Box>
       </Drawer>
       <Main open={open}>
-      
+        <Outlet></Outlet>
       </Main>
     </Box>
   );  

@@ -12,6 +12,8 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import { Provider } from "react-redux";
+import store from "./store";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -55,10 +57,14 @@ const theme = createTheme({
   },
 });
 export default function App() {
-  return <ThemeProvider theme={theme}>
+  return (
+  <ThemeProvider theme={theme}>
     <CssBaseline/>
-    <Outlet />
-  </ThemeProvider> ;
+    <Provider store={store}>
+      <Outlet />
+    </Provider>
+  </ThemeProvider>
+  ) ;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
