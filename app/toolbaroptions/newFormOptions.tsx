@@ -35,7 +35,7 @@ export function NewFormToolbarOptions() {
    return (
           <>
           <Box sx={{flexGrow:1}}>
-            <img src="/logo-tailwind.svg" alt="" width={30} className="mr-2" />
+            <img src="logo-tailwind.svg" alt="" width={30} className="mr-2" />
           </Box>
             <div>
               <IconButton

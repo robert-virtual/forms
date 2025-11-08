@@ -31,7 +31,7 @@ export default function Login() {
       </div>
       <div className="grid place-items-center  h-[90vh] ">
       <Div>
-        <img src="/logo-tailwind.svg" alt="" width={200} />
+        <img src="logo-tailwind.svg" alt="" width={200} />
         <h1 className="text-center">Your Company</h1>
         <div  className="flex flex-col gap-4 mt-4">
             <TextField 

@@ -18,7 +18,7 @@ export function DefaultToolbarOptions() {
   }
    return (
           <>
-          <img src="/logo-tailwind.svg" alt="" width={30} className="mr-2" />
+          <img src="logo-tailwind.svg" alt="" width={30} className="mr-2" />
           <Link to={"/home"}>
             <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
             Your Company
