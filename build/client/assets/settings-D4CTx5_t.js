@@ -1,0 +1,1 @@
+import{w as t,j as e}from"./chunk-UIGDSWPH-D7xIj6oI.js";const i=t(function(){return e.jsx("section",{className:"grid h-screen w-full place-items-center ",children:e.jsx("div",{children:"Settings Page"})})});export{i as default};
