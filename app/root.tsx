@@ -19,6 +19,15 @@ import { useEffect, useState } from "react";
 import supabase from "./utils/supabase";
 import { setSesion } from "./features/sesion/sesionSlice";
 
+if (typeof window !== "undefined") {
+  const redirect = sessionStorage.getItem("rr7_redirect");
+  if (redirect) {
+    console.log("redirect")
+    sessionStorage.removeItem("rr7_redirect");
+    window.history.replaceState(null, "", redirect);
+  }
+}
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
