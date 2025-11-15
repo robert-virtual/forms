@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { CssBaseline, styled, Toolbar } from "@mui/material";
 import MuiAppBar from '@mui/material/AppBar';
 import type { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import { Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import type { RootState } from "~/store";
 import { DefaultToolbarOptions } from "~/toolbaroptions/defaultOptions";
@@ -85,7 +85,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const toolbarComponents = {
-  default: <DefaultToolbarOptions/>,
+  default: <DefaultToolbarOptions />,
   newFormOptions: <NewFormToolbarOptions/>,
   empty: <></>,
 };
@@ -160,8 +160,30 @@ export default function home() {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
+
         <List sx={{flexGrow: 1}} >
-          {forms.length ?  forms.map((form, index) => (
+            <Link to={"/home"}>
+            <ListItem  disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Lotes"} />
+              </ListItemButton>
+            </ListItem>
+            </Link>
+            <ListItem  disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Usuarios"} />
+              </ListItemButton>
+            </ListItem>
+        </List>
+        <Divider/>
+        <List sx={{flexGrow: 1}} >
+          {forms.length &&  forms.map((form, index) => (
             <ListItem key={index.toString()} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
@@ -171,11 +193,7 @@ export default function home() {
               </ListItemButton>
             </ListItem>
           ))
-        : (
-              <ListItemButton>
-                <ListItemText primary={"Aún no tienes formularios"} />
-              </ListItemButton>
-        )}
+        }
         </List>
         <Box
           sx={{

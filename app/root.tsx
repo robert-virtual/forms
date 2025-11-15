@@ -5,15 +5,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigate,
 } from "react-router";
 import '@fontsource/inter';
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CircularProgress, CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { Provider } from "react-redux";
-import store from "./store";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { type AppDispatch, type RootState } from "./store";
+import { useEffect, useState } from "react";
+import supabase from "./utils/supabase";
+import { setSesion } from "./features/sesion/sesionSlice";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -38,7 +42,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <Provider store={store}>
         {children}
+        </Provider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -57,12 +63,42 @@ const theme = createTheme({
   },
 });
 export default function App() {
+    const session = useSelector((state:RootState)=>state.session)
+    const dispatch = useDispatch<AppDispatch>()
+    const [isLoading,setIsLoading] = useState(true)
+    const navigate = useNavigate()
+    useEffect(()=>{
+        supabase.auth.getSession().then(({data})=>{
+            dispatch(setSesion(data.session))
+            setIsLoading(false)
+        })
+        const {data:{subscription}}  = supabase.auth.onAuthStateChange((_event,sesion)=>{
+          console.log("auth changed")
+          dispatch(setSesion(sesion))
+          if (Object.keys(session)) {
+            console.log("navigating to home")
+            navigate('/home',{replace:true}) 
+          }
+          if (!Object.keys(session)) {
+            navigate('/',{replace:true}) 
+          }
+        })
+        return ()=> {
+          console.log("subcription remove")
+          subscription.unsubscribe()
+        }
+    },[])
+    if (isLoading) {
+        return (
+            <div className="grid place-content-center h-screen ">
+                <CircularProgress/>
+            </div>
+        )     
+    }
   return (
   <ThemeProvider theme={theme}>
     <CssBaseline/>
-    <Provider store={store}>
       <Outlet />
-    </Provider>
   </ThemeProvider>
   ) ;
 }

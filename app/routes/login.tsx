@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { ThemeSwitch } from "~/ThemeSwitch/ThemeSwitch";
+import supabase from "~/utils/supabase";
 
 const Div = styled('div')(({theme})=>({
   border: `1px solid ${theme.palette.divider}`,
@@ -20,16 +21,25 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const theme = useTheme();
-    function login() {
-        navigate("/home");    
+  const theme = useTheme();
+  async function login() {
+    console.log("login...")
+    if (!username.length || !password.length) {
+        console
+        return 
     }
+    const {data,error}  = await supabase.auth.signInWithPassword({email:username,password}) 
+    console.log({data,error})
+    if (data.session?.access_token) {
+        
+    }
+  }
   return (
     <div >
       <div className="flex justify-end p-4 sticky top-0">
         <ThemeSwitch />
       </div>
-      <div className="grid place-items-center  h-[90vh] ">
+      <div className="grid place-items-center  h-[90vh] border-2 border-red-500 ">
       <Div>
         <img src="logo-tailwind.svg" alt="" width={200} />
         <h1 className="text-center">Your Company</h1>

@@ -19,12 +19,11 @@ export function DefaultToolbarOptions() {
    return (
           <>
           <img src="logo-tailwind.svg" alt="" width={30} className="mr-2" />
-          <Link to={"/home"}>
+          <Link to={"/home"} className="grow">
             <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
             Your Company
             </Typography>
           </Link>
-            <div>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -53,7 +52,6 @@ export function DefaultToolbarOptions() {
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
-            </div>
           </>
    ) 
 }
