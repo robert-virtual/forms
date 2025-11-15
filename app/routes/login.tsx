@@ -39,7 +39,7 @@ export default function Login() {
       <div className="flex justify-end p-4 sticky top-0">
         <ThemeSwitch />
       </div>
-      <div className="grid place-items-center  h-[90vh] border-2 border-red-500 ">
+      <div className="grid place-items-center  h-[90vh] ">
       <Div>
         <img src="logo-tailwind.svg" alt="" width={200} />
         <h1 className="text-center">Your Company</h1>

@@ -2,11 +2,13 @@ import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import supabase from "~/utils/supabase";
 
 export function DefaultToolbarOptions() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate()
-  function handleLogout(){
+  async function handleLogout(){
+    await supabase.auth.signOut()
     setAnchorEl(null);
     navigate("/",{replace:true});
   }
