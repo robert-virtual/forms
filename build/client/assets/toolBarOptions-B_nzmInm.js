@@ -1,1 +1,0 @@
-import{c as e}from"./redux-toolkit.modern-C6rGwTlY.js";const s={componentKey:"default"},t=e({name:"toolbarBptions",initialState:s,reducers:{setToolbarOptions:(a,o)=>o.payload}}),{setToolbarOptions:n}=t.actions,c=t.reducer;export{n as s,c as t};
